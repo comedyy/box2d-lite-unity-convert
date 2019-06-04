@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Assets
 {
+    [Serializable]
     public class Body
     {
         public Vector2 width;
