@@ -8,7 +8,11 @@ namespace Assets
 {
     class MathUtils
     {
- 
+
+        public static Vector2 Max(Vector2 a, float max)
+        {
+            return new Vector2(Mathf.Max(a.x, max), Mathf.Max(a.y, max));
+        }
 
         public static Vector2 Abs(Vector2 a)
         {
