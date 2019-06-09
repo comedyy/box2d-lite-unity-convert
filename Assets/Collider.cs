@@ -22,4 +22,10 @@ namespace Assets
         public Vector2 position;
         public int radius;
     }
+
+    public struct LineCollider
+    {
+        public Vector2 p1;
+        public Vector2 p2; 
+    }
 }

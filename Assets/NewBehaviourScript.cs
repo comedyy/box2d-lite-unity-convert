@@ -12,6 +12,7 @@ public class NewBehaviourScript : MonoBehaviour
     public SquareCollider square1 = new SquareCollider() { position = new Vector2(0, 0), rotation = Mathf.PI / 6, width = new Vector2(2, 2) };
     public SquareCollider square2 = new SquareCollider() { position = new Vector2(2.8f, 0), rotation = 0, width = new Vector2(2f, 4f) };
     public CircleCollider circle = new CircleCollider() { position = new Vector2(1, 2), radius = 1};
+    public LineCollider line = new LineCollider() { p1 = new Vector2(-1, 1), p2 = new Vector2(2, 4)};
 
     //void Update ()
     //{
@@ -66,10 +67,27 @@ public class NewBehaviourScript : MonoBehaviour
         bool intersect_square1_circle = Intersect.Detect(square1, circle);
         bool intersect_square2_circle = Intersect.Detect(square2, circle);
 
+        Vector2 normal = Vector2.zero;
+        float fratction = 0;
+        bool intersect_line_circle = Intersect.Detect(circle, line, out normal, out fratction);
+
         // body
         DrawSquare(square1, intersect_square_1_2 || intersect_square1_circle);
         DrawSquare(square2, intersect_square_1_2 || intersect_square2_circle);
         DrawCicle(circle, intersect_square2_circle || intersect_square1_circle);
+        DrawLine(line, intersect_line_circle, normal, fratction);
+    }
+
+    private void DrawLine(LineCollider line, bool intersect_line_circle, Vector2 normal, float fraction)
+    {
+        Gizmos.color = intersect_line_circle ? Color.green : Color.blue;
+        Gizmos.DrawLine(line.p1, line.p2);
+        if (intersect_line_circle)
+        {
+            Gizmos.color = Color.yellow;
+            Vector2 pos_intersect = line.p1 + fraction * (line.p2 - line.p1);
+            Gizmos.DrawLine(pos_intersect, pos_intersect + normal);
+        }
     }
 
     private void DrawCicle(CircleCollider circle, bool is_intersect)
