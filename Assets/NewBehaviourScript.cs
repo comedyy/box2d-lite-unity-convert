@@ -12,50 +12,8 @@ public class NewBehaviourScript : MonoBehaviour
     public SquareCollider square1 = new SquareCollider() { position = new Vector2(0, 0), rotation = Mathf.PI / 6, width = new Vector2(2, 2) };
     public SquareCollider square2 = new SquareCollider() { position = new Vector2(2.8f, 0), rotation = 0, width = new Vector2(2f, 4f) };
     public CircleCollider circle = new CircleCollider() { position = new Vector2(1, 2), radius = 1};
-    public LineCollider line = new LineCollider() { p1 = new Vector2(-1, 1), p2 = new Vector2(2, 4)};
-
-    //void Update ()
-    //{
-    //    Vector2 hA = 0.5f * bodyA.width;
-    //    Vector2 hB = 0.5f * bodyB.width;
-
-    //    Vector2 posA = bodyA.position;
-    //    Vector2 posB = bodyB.position;
-
-    //    Mat22 RotA = new Mat22(bodyA.rotation);
-    //    Mat22 RotB = new Mat22(bodyB.rotation);
-
-    //    Mat22 RotAT = RotA.Transpose();
-    //    Mat22 RotBT = RotB.Transpose();
-
-    //    Vector2 dp = posB - posA;          // 距离向量
-    //    Vector2 dA = RotAT * dp;           // 距离向量，在A的局部坐标系里面表现
-    //    Vector2 dB = RotBT * dp;           // 距离向量，在B的局部坐标里面的表现。
-
-    //    Mat22 C = RotAT * RotB;
-    //    Mat22 absC =  MathUtils.Abs(C);
-    //    Mat22 absCT = absC.Transpose();
-
-    //    // Box A faces
-    //    Vector2 faceA = MathUtils.Abs(dA) - hA - absC * hB;
-    //    if (faceA.x > 0.0f || faceA.y > 0.0f)
-    //    {
-    //        contact.text = "not contact";
-    //        return;
-    //    }
-
-    //    // Box B faces
-    //    Vector2 faceB = MathUtils.Abs(dB) - absCT * hA - hB;
-    //    if (faceB.x > 0.0f || faceB.y > 0.0f)
-    //    {
-    //        contact.text = "not contact";
-    //        return;
-    //    }
-
-    //    contact.text = "contacted";
-    //}
-
-
+    public LineCollider line = new LineCollider() { p1 = new Vector2(-1, 1), p2 = new Vector2(2, 4) };
+    public LineCollider line_1 = new LineCollider() { p1 = new Vector2(1, -1), p2 = new Vector2(5, -1.5f)};
 
     void OnDrawGizmos()
     {
@@ -71,11 +29,14 @@ public class NewBehaviourScript : MonoBehaviour
         float fratction = 0;
         bool intersect_line_circle = Intersect.Detect(circle, line, out normal, out fratction);
 
+        bool intersect_line_square = Intersect.Detect(square2, line_1, out normal, out fratction);
+
         // body
         DrawSquare(square1, intersect_square_1_2 || intersect_square1_circle);
         DrawSquare(square2, intersect_square_1_2 || intersect_square2_circle);
         DrawCicle(circle, intersect_square2_circle || intersect_square1_circle);
         DrawLine(line, intersect_line_circle, normal, fratction);
+        DrawLine(line_1, intersect_line_square, normal, fratction);
     }
 
     private void DrawLine(LineCollider line, bool intersect_line_circle, Vector2 normal, float fraction)

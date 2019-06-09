@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Assets
 {
@@ -126,5 +127,97 @@ namespace Assets
 
             return false;
         }
+
+        // 切换到矩形的local坐标系
+        // p = p1 + a * d
+        // dot(normal, p - v) = 0
+        // dot(normal, p1 - v) + a * dot(normal, d) = 0
+        public static bool Detect(SquareCollider body, LineCollider line, out Vector2 normal, out float fraction)
+        {
+            normal = Vector2.zero;
+            fraction = 0;
+
+            Mat22 RotA = new Mat22(body.rotation);
+            Mat22 RotAT = RotA.Transpose();
+
+            Vector2 p1 = RotAT * line.p1;
+            Vector2 p2 = RotAT * line.p2;
+
+            Vector2 d = p2 - p1;
+
+            float lower = 0.0f, upper = 1;
+            int index = -1;
+
+            Vector2[] vertices = {
+                new Vector2(body.position.x - body.width.x / 2, body.position.y - body.width.y / 2),
+                new Vector2(body.position.x + body.width.x / 2, body.position.y - body.width.y / 2),
+                new Vector2(body.position.x + body.width.x / 2, body.position.y + body.width.y / 2),
+                new Vector2(body.position.x - body.width.x / 2, body.position.y + body.width.y / 2),
+            };
+            Vector2[] normals = {
+                new Vector2(0, -1),
+                new Vector2(1, 0),
+                new Vector2(0, 1),
+                new Vector2(-1, 0),
+
+            };
+
+            for (int i = 0; i < 4; ++i)
+            {
+                // p = p1 + a * d
+                // dot(normal, p - v) = 0
+                // dot(normal, p1 - v) + a * dot(normal, d) = 0
+                float numerator = Vector2.Dot(normals[i], vertices[i] - p1);
+                float denominator = Vector2.Dot(normals[i], d);
+
+                if (denominator == 0.0f)
+                {
+                    if (numerator < 0.0f)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    // Note: we want this predicate without division:
+                    // lower < numerator / denominator, where denominator < 0
+                    // Since denominator < 0, we have to flip the inequality:
+                    // lower < numerator / denominator <==> denominator * lower > numerator.
+                    if (denominator < 0.0f && numerator < lower * denominator)
+                    {
+                        // Increase lower.
+                        // The segment enters this half-space.
+                        lower = numerator / denominator;
+                        index = i;
+                    }
+                    else if (denominator > 0.0f && numerator < upper * denominator)
+                    {
+                        // Decrease upper.
+                        // The segment exits this half-space.
+                        upper = numerator / denominator;
+                    }
+                }
+
+                // The use of epsilon here causes the assert on lower to trip
+                // in some cases. Apparently the use of epsilon was to make edge
+                // shapes work, but now those are handled separately.
+                //if (upper < lower - b2_epsilon)
+                if (upper < lower)
+                {
+                    return false;
+                }
+            }
+
+            Assert.IsTrue(0.0f <= lower && lower <= 1);
+
+            if (index >= 0)
+            {
+                fraction = lower;
+                normal = RotA * normals[index];
+                return true;
+            }
+
+            return false;
+        }    
     }
 }
