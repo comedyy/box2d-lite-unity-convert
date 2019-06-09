@@ -140,8 +140,8 @@ namespace Assets
             Mat22 RotA = new Mat22(body.rotation);
             Mat22 RotAT = RotA.Transpose();
 
-            Vector2 p1 = RotAT * line.p1;
-            Vector2 p2 = RotAT * line.p2;
+            Vector2 p1 = RotAT * (line.p1-body.position)+body.position;
+            Vector2 p2 = RotAT * (line.p2 - body.position) + body.position;
 
             Vector2 d = p2 - p1;
 
