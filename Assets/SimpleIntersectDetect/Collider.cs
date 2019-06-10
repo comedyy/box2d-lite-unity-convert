@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace Assets
+namespace SimpleIntersectDetect
 {
     public enum ColliderType {
         Circle,
@@ -34,10 +34,10 @@ namespace Assets
 
     public struct CircleCollider {
         public Vector2 position;
-        public int radius;
+        public float radius;
     }
 
-    public struct LineCollider
+    public struct RayCollider
     {
         public Vector2 p1;
         public Vector2 p2; 

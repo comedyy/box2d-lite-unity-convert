@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Assets
+namespace SimpleIntersectDetect
 {
     public static class Intersect
     {
@@ -57,7 +57,7 @@ namespace Assets
 
         public static bool DetectTwoCircle(CircleCollider bodyA, CircleCollider bodyBb)
         {
-            int total_radius = bodyA.radius + bodyBb.radius;
+            float total_radius = bodyA.radius + bodyBb.radius;
             Vector2 vec_pos_diff = bodyA.position - bodyBb.position;
             return vec_pos_diff.sqrMagnitude > total_radius * total_radius;
         }
@@ -107,7 +107,7 @@ namespace Assets
          *  t = -c - sigma        
          * 
          */
-        public static bool RaycastCircle(CircleCollider body, LineCollider line, out Vector2 normal, out float fraction)
+        public static bool RaycastCircle(CircleCollider body, RayCollider line, out Vector2 normal, out float fraction)
         {
             normal = Vector2.zero;
             fraction = 0;
@@ -146,7 +146,7 @@ namespace Assets
         // p = p1 + a * d
         // dot(normal, p - v) = 0
         // dot(normal, p1 - v) + a * dot(normal, d) = 0
-        public static bool RaycastSquare(SquareCollider body, LineCollider line, out Vector2 normal, out float fraction)
+        public static bool RaycastSquare(SquareCollider body, RayCollider line, out Vector2 normal, out float fraction)
         {
             normal = Vector2.zero;
             fraction = 0;

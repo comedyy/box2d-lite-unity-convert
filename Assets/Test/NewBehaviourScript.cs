@@ -1,4 +1,4 @@
-﻿using Assets;
+﻿using SimpleIntersectDetect;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,8 +12,8 @@ public class NewBehaviourScript : MonoBehaviour
     public SquareCollider square1 = new SquareCollider() { position = new Vector2(0, 0), rotation = Mathf.PI / 6, width = new Vector2(2, 2) };
     public SquareCollider square2 = new SquareCollider() { position = new Vector2(2.8f, 0), rotation = 0, width = new Vector2(2f, 4f) };
     public CircleCollider circle = new CircleCollider() { position = new Vector2(1, 2), radius = 1};
-    public LineCollider line = new LineCollider() { p1 = new Vector2(-1, 1), p2 = new Vector2(2, 4) };
-    public LineCollider line_1 = new LineCollider() { p1 = new Vector2(1, -1), p2 = new Vector2(5, -1.5f)};
+    public RayCollider line = new RayCollider() { p1 = new Vector2(-1, 1), p2 = new Vector2(2, 4) };
+    public RayCollider line_1 = new RayCollider() { p1 = new Vector2(1, -1), p2 = new Vector2(5, -1.5f)};
 
     void OnDrawGizmos()
     {
@@ -41,7 +41,7 @@ public class NewBehaviourScript : MonoBehaviour
         DrawLine(line_1, intersect_line_square, normal1, fratction1);
     }
 
-    private void DrawLine(LineCollider line, bool intersect_line_circle, Vector2 normal, float fraction)
+    private void DrawLine(RayCollider line, bool intersect_line_circle, Vector2 normal, float fraction)
     {
         Gizmos.color = intersect_line_circle ? Color.green : Color.blue;
         Gizmos.DrawLine(line.p1, line.p2);
