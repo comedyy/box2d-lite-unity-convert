@@ -16,6 +16,20 @@ namespace Assets
         public Vector2 position;
         public float rotation;
         public Vector2 width;
+
+        public static Vector2[] normals = {
+                new Vector2(0, -1),
+                new Vector2(1, 0),
+                new Vector2(0, 1),
+                new Vector2(-1, 0),
+            };
+
+        public static Vector2[] vecties = {
+            new Vector2(-0.5f, -0.5f),
+            new Vector2(0.5f, -0.5f),
+            new Vector2(0.5f, 0.5f),
+            new Vector2(-0.5f, 0.5f),
+        };
     }
 
     public struct CircleCollider {

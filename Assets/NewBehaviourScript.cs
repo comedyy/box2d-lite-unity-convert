@@ -21,22 +21,24 @@ public class NewBehaviourScript : MonoBehaviour
         square1.rotation += 0.1f;
         square2.rotation += -0.1f;
 
-        bool intersect_square_1_2 = Intersect.Detect(square1, square2);
-        bool intersect_square1_circle = Intersect.Detect(square1, circle);
-        bool intersect_square2_circle = Intersect.Detect(square2, circle);
+        bool intersect_square_1_2 = Intersect.DetectTwoSquare(square1, square2);
+        bool intersect_square1_circle = Intersect.DetectSquareCircle(square1, circle);
+        bool intersect_square2_circle = Intersect.DetectSquareCircle(square2, circle);
 
         Vector2 normal = Vector2.zero;
         float fratction = 0;
-        bool intersect_line_circle = Intersect.Detect(circle, line, out normal, out fratction);
+        bool intersect_line_circle = Intersect.RaycastCircle(circle, line, out normal, out fratction);
 
-        bool intersect_line_square = Intersect.Detect(square2, line_1, out normal, out fratction);
+        Vector2 normal1 = Vector2.zero;
+        float fratction1 = 0;
+        bool intersect_line_square = Intersect.RaycastSquare(square2, line_1, out normal1, out fratction1);
 
         // body
         DrawSquare(square1, intersect_square_1_2 || intersect_square1_circle);
         DrawSquare(square2, intersect_square_1_2 || intersect_square2_circle);
         DrawCicle(circle, intersect_square2_circle || intersect_square1_circle);
         DrawLine(line, intersect_line_circle, normal, fratction);
-        DrawLine(line_1, intersect_line_square, normal, fratction);
+        DrawLine(line_1, intersect_line_square, normal1, fratction1);
     }
 
     private void DrawLine(LineCollider line, bool intersect_line_circle, Vector2 normal, float fraction)
